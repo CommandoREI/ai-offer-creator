@@ -75,10 +75,10 @@ def generate_offers():
         data = request.json
         
         # Extract inputs
-        strategy1 = data.get('strategy1')
-        strategy2 = data.get('strategy2')
-        weight1 = int(data.get('weight1', 50))
-        weight2 = int(data.get('weight2', 50))
+        strategy1 = data.get('offer_a_strategy')
+        strategy2 = data.get('offer_b_strategy')
+        weight1 = int(data.get('offer_a_weight', 50))
+        weight2 = int(data.get('offer_b_weight', 50))
         
         # Property data
         property_data = {
@@ -91,7 +91,7 @@ def generate_offers():
         
         # Seller data
         seller_data = {
-            'motivation_score': int(data.get('motivation_score', 5)),
+            'motivation_score': int(data.get('motivation', 5)),
             'pain_point': data.get('pain_point', ''),
             'timeline': data.get('timeline', ''),
             'cash_needed': float(data.get('cash_needed', 0)),
@@ -100,7 +100,7 @@ def generate_offers():
         
         # Investor criteria
         investor_data = {
-            'max_offer_percent': float(data.get('max_offer_percent', 70)),
+            'max_offer_percent': float(data.get('max_offer_pct', 70)),
             'min_profit': float(data.get('min_profit', 20000)),
             'available_cash': float(data.get('available_cash', 10000)),
             'exit_strategy': data.get('exit_strategy', 'flip')
