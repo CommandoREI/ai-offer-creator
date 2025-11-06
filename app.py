@@ -16,7 +16,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize OpenAI client
-client = OpenAI()
+# Use environment variable or fallback
+api_key = os.getenv('OPENAI_API_KEY', 'sk-proj-IYiSZHr7hN6DA64WZ7jAcuKIUwossxZ7HAXvSYgDDv5K6Inj2sgvTNcKycTstNUvJz6wJwdN8RT3BIbKFJ_5pJ5RRJEHyGBzqFp4DljfewS2DJwdI-pQOvbsweHVMyoSsPsim_ELXUx-o2-kzze0vDe0CQA')
+client = OpenAI(api_key=api_key)
 
 # Strategy definitions with explanations
 STRATEGIES = {
