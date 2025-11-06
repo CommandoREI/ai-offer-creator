@@ -110,6 +110,14 @@ def generate_offers():
             'exit_strategy': data.get('exit_strategy', 'flip')
         }
         
+        # Creative financing terms
+        creative_terms = {
+            'option_term_months': int(data.get('option_term_months', 36)),  # For Lease Option
+            'additional_option_price': float(data.get('additional_option_price', 0)),  # For Lease Option
+            'monthly_payment_markup': float(data.get('monthly_payment_markup', 0)),  # For Seller Financing Wrap
+            'additional_purchase_price': float(data.get('additional_purchase_price', 0))  # For Seller Financing Wrap
+        }
+        
         # Advanced mode settings
         advanced_mode = data.get('advanced_mode', False)
         advanced_settings = data.get('advanced_settings', {})
@@ -118,7 +126,7 @@ def generate_offers():
         offers = generate_strategic_offers(
             strategy1, strategy2, weight1, weight2,
             property_data, seller_data, investor_data,
-            advanced_mode, advanced_settings
+            creative_terms, advanced_mode, advanced_settings
         )
         
         return jsonify(offers)
@@ -131,7 +139,7 @@ def generate_offers():
 
 def generate_strategic_offers(strategy1, strategy2, weight1, weight2,
                               property_data, seller_data, investor_data,
-                              advanced_mode, advanced_settings):
+                              creative_terms, advanced_mode, advanced_settings):
     """Use AI to generate two strategic offers"""
     
     # Build prompt for AI
@@ -159,6 +167,12 @@ INVESTOR CRITERIA:
 - Available Cash: ${investor_data['available_cash']:,.0f}
 - Exit Strategy: {investor_data['exit_strategy']}
 
+CREATIVE FINANCING TERMS:
+- Option Term: {creative_terms['option_term_months']} months (for Lease Option)
+- Additional Option Price: ${creative_terms['additional_option_price']:,.0f} (for Lease Option)
+- Monthly Payment Markup: ${creative_terms['monthly_payment_markup']:,.0f} (for Seller Financing Wrap)
+- Additional Purchase Price: ${creative_terms['additional_purchase_price']:,.0f} (for Seller Financing Wrap)
+
 OFFER STRATEGIES:
 Offer A: {STRATEGIES[strategy1]['name']} (Weight: {weight1}% - {'MORE attractive' if weight1 > 50 else 'LESS attractive' if weight1 < 50 else 'EQUALLY attractive'})
 Offer B: {STRATEGIES[strategy2]['name']} (Weight: {weight2}% - {'MORE attractive' if weight2 > 50 else 'LESS attractive' if weight2 < 50 else 'EQUALLY attractive'})
@@ -173,13 +187,35 @@ IMPORTANT CALCULATION RULES:
 
 FOR SUBJECT-TO OFFERS:
 - Base amount = Mortgage Balance + Arrears
+- Purchase price = Mortgage Balance + Arrears (you're taking over the debt)
 - Auto-generate TWO variations of cash at closing based on seller's request:
   * Offer variation 1: ~80% of seller's cash request (e.g., $4,000 if they want $5,000) - all upfront
-  * Offer variation 2: ~120% of seller's cash request (e.g., $6,000 if they want $5,000) - with payment split
-- For variation 2, split the payment: 50% at closing, 50% in 60 days (e.g., "$3,000 now + $3,000 in 60 days")
-- This creates a "decision point" for the seller - more total cash but delayed vs less cash but immediate
-- Purchase price = Mortgage Balance + Arrears (you're taking over the debt)
-- The small cash difference ($2,000) is negligible for investor but creates psychological choice
+  * Offer variation 2: ~120% of seller's cash request (e.g., $6,000 if they want $5,000)
+- IMPORTANT: Only use split payment (50% now + 50% in 60 days) if BOTH offers are Subject-To
+- If only ONE offer is Subject-To, do NOT use split payment - just vary the total amounts
+- Split payment creates a "decision point" for seller when comparing two Subject-To offers
+- The small cash difference is negligible for investor but creates psychological choice
+
+FOR LEASE OPTION OFFERS:
+- Monthly lease payment = Current PITI (mortgage payment)
+- Option price = Mortgage Balance + Additional Option Price (from user input)
+- Option term = User-specified months (from creative financing terms)
+- NO upfront option fee or option payment at closing ($0)
+- Generate two variations by varying the additional option price:
+  * Offer variation 1: Mortgage Balance + (80% of additional option price)
+  * Offer variation 2: Mortgage Balance + (120% of additional option price)
+- Structure: "Lease for $X/month with option to purchase for $Y within Z months"
+
+FOR SELLER FINANCING (WRAP) OFFERS:
+- This is a WRAP mortgage - seller keeps existing mortgage, you pay seller, seller pays their mortgage
+- Monthly payment to seller = PITI + Monthly Payment Markup (from user input)
+- Purchase price = Mortgage Balance + Additional Purchase Price (from user input)
+- Interest rate = Same as seller's existing note (seller gets no benefit on rate)
+- Term = Same as seller's remaining mortgage term
+- Generate two variations:
+  * Offer variation 1: PITI + (80% of markup), Mortgage + (80% of additional price)
+  * Offer variation 2: PITI + (120% of markup), Mortgage + (120% of additional price)
+- Structure: "Pay seller $X/month, seller continues paying their mortgage, you control property"
 
 FOR ALL-CASH OFFERS:
 - Purchase price = ARV × Max Cash Offer Percentage
