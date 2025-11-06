@@ -75,3 +75,5 @@ Proprietary - Real Estate Commando
 ## Version
 
 1.0.0 - November 2025
+
+<!-- Trigger redeploy to pick up shared OPENAI_API_KEY variable -->
