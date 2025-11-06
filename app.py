@@ -15,10 +15,11 @@ import io
 app = Flask(__name__)
 CORS(app)
 
-# Initialize OpenAI client
-# Use environment variable or fallback
-api_key = os.getenv('OPENAI_API_KEY', 'sk-proj-IYiSZHr7hN6DA64WZ7jAcuKIUwossxZ7HAXvSYgDDv5K6Inj2sgvTNcKycTstNUvJz6wJwdN8RT3BIbKFJ_5pJ5RRJEHyGBzqFp4DljfewS2DJwdI-pQOvbsweHVMyoSsPsim_ELXUx-o2-kzze0vDe0CQA')
-client = OpenAI(api_key=api_key)
+# Initialize OpenAI client with timeout
+# OpenAI client will automatically use OPENAI_API_KEY from environment
+if not os.getenv('OPENAI_API_KEY'):
+    print("WARNING: OPENAI_API_KEY environment variable not set!")
+client = OpenAI(timeout=60.0)
 
 # Strategy definitions with explanations
 STRATEGIES = {
@@ -120,7 +121,10 @@ def generate_offers():
         return jsonify(offers)
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"Error in generate_offers: {str(e)}")  # Log to Railway
+        import traceback
+        traceback.print_exc()  # Print full traceback
+        return jsonify({'error': f'Failed to generate offers: {str(e)}'}), 500
 
 def generate_strategic_offers(strategy1, strategy2, weight1, weight2,
                               property_data, seller_data, investor_data,
@@ -200,16 +204,21 @@ Return ONLY valid JSON in this exact format:
   "closing_question": "Question to ask after presenting both offers"
 }}"""
 
-    # Call OpenAI API
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "system", "content": "You are an expert real estate investor and negotiation strategist. Generate realistic, strategic offer scenarios in valid JSON format."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7,
-        max_tokens=2000
-    )
+    # Call OpenAI API with error handling
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {"role": "system", "content": "You are an expert real estate investor and negotiation strategist. Generate realistic, strategic offer scenarios in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=2000,
+            timeout=60.0
+        )
+    except Exception as api_error:
+        print(f"OpenAI API error: {str(api_error)}")
+        raise Exception(f"OpenAI API error: {str(api_error)}")
     
     # Parse response
     result = json.loads(response.choices[0].message.content)
