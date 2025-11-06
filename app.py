@@ -87,7 +87,8 @@ def generate_offers():
             'repairs': float(data.get('repairs', 0)),
             'mortgage_balance': float(data.get('mortgage_balance', 0)),
             'monthly_payment': float(data.get('monthly_payment', 0)),
-            'condition': data.get('condition', 5)
+            'condition': data.get('condition', 5),
+            'arrears': float(data.get('arrears', 0))  # New: back payments/arrears
         }
         
         # Seller data
@@ -96,12 +97,14 @@ def generate_offers():
             'pain_point': data.get('pain_point', ''),
             'timeline': data.get('timeline', ''),
             'cash_needed': float(data.get('cash_needed', 0)),
+            'seller_cash_request': float(data.get('seller_cash_request', 0)),  # New: what seller is asking for
             'priorities': data.get('priorities', [])
         }
         
         # Investor criteria
+        # max_offer_percent only applies to cash offers
         investor_data = {
-            'max_offer_percent': float(data.get('max_offer_pct', 70)),
+            'max_offer_percent': float(data.get('max_offer_pct', 70)) if data.get('max_offer_pct') else None,
             'min_profit': float(data.get('min_profit', 20000)),
             'available_cash': float(data.get('available_cash', 10000)),
             'exit_strategy': data.get('exit_strategy', 'flip')
@@ -138,6 +141,7 @@ PROPERTY DETAILS:
 - ARV (After Repair Value): ${property_data['arv']:,.0f}
 - Estimated Repairs: ${property_data['repairs']:,.0f}
 - Current Mortgage: ${property_data['mortgage_balance']:,.0f}
+- Arrears/Back Payments: ${property_data['arrears']:,.0f}
 - Monthly Payment: ${property_data['monthly_payment']:,.0f}
 - Property Condition: {property_data['condition']}/10
 
@@ -146,10 +150,11 @@ SELLER SITUATION:
 - Primary Pain Point: {seller_data['pain_point']}
 - Timeline: {seller_data['timeline']}
 - Cash Needed at Closing: ${seller_data['cash_needed']:,.0f}
+- Seller's Cash Request: ${seller_data['seller_cash_request']:,.0f}
 - Priorities: {', '.join(seller_data['priorities'])}
 
 INVESTOR CRITERIA:
-- Max Offer: {investor_data['max_offer_percent']}% of ARV
+- Max Cash Offer: {investor_data['max_offer_percent']}% of ARV (only applies to all-cash offers)
 - Minimum Profit Target: ${investor_data['min_profit']:,.0f}
 - Available Cash: ${investor_data['available_cash']:,.0f}
 - Exit Strategy: {investor_data['exit_strategy']}
@@ -164,14 +169,32 @@ Generate TWO complete offer scenarios. The weighting determines relative attract
 - Lower weight (<50%) = Less attractive but still legitimate (lower price, less cash, longer timeline)
 - Equal weight (50/50) = Both equally attractive with different benefits
 
+IMPORTANT CALCULATION RULES:
+
+FOR SUBJECT-TO OFFERS:
+- Base amount = Mortgage Balance + Arrears
+- Auto-generate TWO variations of cash at closing based on seller's request:
+  * Offer variation 1: ~80% of seller's cash request (e.g., $4,000 if they want $5,000) - all upfront
+  * Offer variation 2: ~120% of seller's cash request (e.g., $6,000 if they want $5,000) - with payment split
+- For variation 2, split the payment: 50% at closing, 50% in 60 days (e.g., "$3,000 now + $3,000 in 60 days")
+- This creates a "decision point" for the seller - more total cash but delayed vs less cash but immediate
+- Purchase price = Mortgage Balance + Arrears (you're taking over the debt)
+- The small cash difference ($2,000) is negligible for investor but creates psychological choice
+
+FOR ALL-CASH OFFERS:
+- Purchase price = ARV × Max Cash Offer Percentage
+- Cash at closing = Purchase price - Mortgage Balance - Arrears
+- If cash at closing is negative, this offer is NOT viable (seller would owe money at closing)
+- Only present cash offers when the math works for the seller
+
 For each offer, provide:
-1. Purchase price (realistic based on ARV and strategy)
-2. Cash at closing (what seller receives after mortgage payoff)
-3. Payment structure (if applicable)
+1. Purchase price (calculated per rules above)
+2. Cash at closing (what seller receives after mortgage/arrears payoff)
+3. Payment structure (for Subject-To, include split payment details if applicable)
 4. Closing timeline
 5. Key terms and conditions
 6. 3-4 seller benefits (why this works for them)
-7. Presentation script (how to verbally present this offer)
+7. Presentation script (emphasize payment split as flexibility/benefit for Subject-To variation 2)
 8. Strategic notes for investor (negotiation tips, fallback positions)
 
 Return ONLY valid JSON in this exact format:

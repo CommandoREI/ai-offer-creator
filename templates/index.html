@@ -483,7 +483,7 @@
                         <h3>Offer A</h3>
                         <div class="form-group">
                             <label>Strategy:</label>
-                            <select id="strategy1" onchange="updateStrategyInfo('strategy1', 'info1')">
+                            <select id="strategy1" onchange="updateStrategyInfo('strategy1', 'info1'); toggleMaxOfferField();">
                                 <option value="cash">All Cash</option>
                                 <option value="subject_to" selected>Subject-To (Take Over Payments)</option>
                                 <option value="lease_option">Lease Option</option>
@@ -513,7 +513,7 @@
                         <h3>Offer B</h3>
                         <div class="form-group">
                             <label>Strategy:</label>
-                            <select id="strategy2" onchange="updateStrategyInfo('strategy2', 'info2')">
+                            <select id="strategy2" onchange="updateStrategyInfo('strategy2', 'info2'); toggleMaxOfferField();">
                                 <option value="cash" selected>All Cash</option>
                                 <option value="subject_to">Subject-To (Take Over Payments)</option>
                                 <option value="lease_option">Lease Option</option>
@@ -561,6 +561,10 @@
                         <input type="number" id="monthly_payment" placeholder="850" value="850">
                     </div>
                     <div class="form-group">
+                        <label>Arrears/Back Payments:</label>
+                        <input type="number" id="arrears" placeholder="0" value="0">
+                    </div>
+                    <div class="form-group">
                         <label>Property Condition (1-10):</label>
                         <input type="number" id="condition" min="1" max="10" placeholder="5" value="5">
                     </div>
@@ -600,6 +604,10 @@
                         <label>Cash Needed at Closing:</label>
                         <input type="number" id="cash_needed" placeholder="5000" value="5000">
                     </div>
+                    <div class="form-group">
+                        <label>Seller's Cash Request:</label>
+                        <input type="number" id="seller_cash_request" placeholder="5000" value="5000">
+                    </div>
                 </div>
             </div>
 
@@ -607,9 +615,10 @@
             <div class="card">
                 <h2>4️⃣ Your Investment Criteria</h2>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label>Max Offer (% of ARV):</label>
+                    <div class="form-group" id="max_offer_field">
+                        <label>Max Cash Offer (% of ARV):</label>
                         <input type="number" id="max_offer_percent" min="50" max="100" placeholder="70" value="70">
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">Only applies to all-cash offers</small>
                     </div>
                     <div class="form-group">
                         <label>Minimum Profit Target:</label>
@@ -695,6 +704,7 @@
                 strategies = data;
                 updateStrategyInfo('strategy1', 'info1');
                 updateStrategyInfo('strategy2', 'info2');
+                toggleMaxOfferField();
             });
 
         function setMode(mode) {
@@ -742,6 +752,19 @@
             }
         }
 
+        function toggleMaxOfferField() {
+            // Show max_offer_field only if either strategy is 'cash'
+            const strategy1 = document.getElementById('strategy1').value;
+            const strategy2 = document.getElementById('strategy2').value;
+            const maxOfferField = document.getElementById('max_offer_field');
+            
+            if (strategy1 === 'cash' || strategy2 === 'cash') {
+                maxOfferField.style.display = 'block';
+            } else {
+                maxOfferField.style.display = 'none';
+            }
+        }
+
         function applyPreset(preset) {
             switch(preset) {
                 case 'sub2_vs_cash':
@@ -773,6 +796,7 @@
             updateWeight('weight1', 'weight1Display', 'weight2', 'weight2Display');
             updateStrategyInfo('strategy1', 'info1');
             updateStrategyInfo('strategy2', 'info2');
+            toggleMaxOfferField();
         }
 
         async function generateOffers() {
@@ -789,12 +813,14 @@
                 arv: document.getElementById('arv').value,
                 repairs: document.getElementById('repairs').value,
                 mortgage_balance: document.getElementById('mortgage_balance').value,
+                arrears: document.getElementById('arrears').value,
                 monthly_payment: document.getElementById('monthly_payment').value,
                 condition: document.getElementById('condition').value,
                 motivation: document.getElementById('motivation_score').value,
                 pain_point: document.getElementById('pain_point').value,
                 timeline: document.getElementById('timeline').value,
                 cash_needed: document.getElementById('cash_needed').value,
+                seller_cash_request: document.getElementById('seller_cash_request').value,
                 max_offer_pct: document.getElementById('max_offer_percent').value,
                 min_profit: document.getElementById('min_profit').value,
                 available_cash: document.getElementById('available_cash').value,
