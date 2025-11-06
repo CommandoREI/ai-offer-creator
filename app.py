@@ -68,7 +68,7 @@ def get_strategies():
     """Return available strategies with explanations"""
     return jsonify(STRATEGIES)
 
-@app.route('/api/generate-offers', methods=['POST'])
+@app.route('/api/generate', methods=['POST'])
 def generate_offers():
     """Generate two strategic offers based on user inputs"""
     try:
