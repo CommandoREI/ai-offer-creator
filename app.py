@@ -31,8 +31,8 @@ STRATEGIES = {
         'cons': ['Requires capital', 'Usually lowest price', 'Limited flexibility']
     },
     'subject_to': {
-        'name': 'Subject-To (Take Over Payments)',
-        'description': 'Take over existing mortgage payments without formal assumption',
+        'name': 'Subject-To (Handle The Mortgage Payments)',
+        'description': 'Handle existing mortgage payments until refinance or resale',
         'when_to_use': 'Seller has equity, good loan terms, needs debt relief',
         'pros': ['Low cash needed', 'Leverage existing financing', 'Can offer higher price'],
         'cons': ['Due-on-sale risk', 'Requires seller trust', 'More complex']
@@ -136,6 +136,7 @@ def generate_offers():
         import traceback
         traceback.print_exc()  # Print full traceback
         return jsonify({'error': f'Failed to generate offers: {str(e)}'}), 500
+
 def validate_and_fix_cash_offer(offer, property_data):
     """Validate and correct cash offer calculations"""
     purchase_price = offer.get('purchase_price', 0)
@@ -164,7 +165,6 @@ def validate_and_fix_cash_offer(offer, property_data):
     else:
         offer['viability_flag'] = 'VIABLE'
         offer['viability_note'] = f"Seller receives ${round(actual_cash_at_closing, 0):,.0f} cash after all payoffs"
-
 
 def generate_strategic_offers(strategy1, strategy2, weight1, weight2,
                               property_data, seller_data, investor_data,
@@ -223,7 +223,7 @@ IMPORTANT CALCULATION RULES:
 
 FOR SUBJECT-TO OFFERS:
 - Base amount = Mortgage Balance + Arrears
-- Purchase price = Mortgage Balance + Arrears (you're taking over the debt)
+- Purchase price = Mortgage Balance + Arrears (you're handling the mortgage payments)
 - Cash at closing calculation:
   * If BOTH offers are Subject-To: Generate variations (~80% and ~120% of seller's cash request)
   * If only ONE offer is Subject-To: Use seller's cash request as-is or adjust based on weight
@@ -315,13 +315,13 @@ Return ONLY valid JSON in this exact format:
     
     # Parse response
     result = json.loads(response.choices[0].message.content)
-        
+    
     # Validate and fix cash offer calculations
     if result.get('offer_a', {}).get('strategy') == 'cash':
         validate_and_fix_cash_offer(result['offer_a'], property_data)
     if result.get('offer_b', {}).get('strategy') == 'cash':
         validate_and_fix_cash_offer(result['offer_b'], property_data)
-
+    
     # Add metadata
     result['generated_at'] = datetime.now().isoformat()
     result['property_arv'] = property_data['arv']
@@ -378,14 +378,9 @@ def generate_pdf(offers, format_type):
         spaceAfter=12
     )
     
-    # Title
-    if format_type == 'branded':
-        story.append(Paragraph("AI Offer Creator - Real Estate Commando", title_style))
-        story.append(Paragraph(f"Generated: {datetime.now().strftime('%B %d, %Y')}", styles['Normal']))
-        story.append(Spacer(1, 0.3*inch))
-    else:
-        story.append(Paragraph("Property Offer Comparison", title_style))
-        story.append(Spacer(1, 0.2*inch))
+    # Title (unbranded for both formats)
+    story.append(Paragraph("Property Offer Comparison", title_style))
+    story.append(Spacer(1, 0.2*inch))
     
     # Offer A
     story.append(Paragraph(f"Option A: {offers['offer_a']['headline']}", heading_style))
@@ -393,11 +388,11 @@ def generate_pdf(offers, format_type):
     offer_a_data = [
         ['Purchase Price:', f"${offers['offer_a']['purchase_price']:,.0f}"],
         ['Cash at Closing:', f"${offers['offer_a']['cash_at_closing']:,.0f}"],
-        ['Payment Structure:', offers['offer_a']['payment_structure']],
+        ['Payment Structure:', Paragraph(offers['offer_a']['payment_structure'], styles['Normal'])],
         ['Closing Timeline:', f"{offers['offer_a']['timeline_days']} days"],
     ]
     
-    table_a = Table(offer_a_data, colWidths=[2*inch, 4*inch])
+    table_a = Table(offer_a_data, colWidths=[2*inch, 4.5*inch])
     table_a.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f0f0f0')),
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
@@ -424,11 +419,11 @@ def generate_pdf(offers, format_type):
     offer_b_data = [
         ['Purchase Price:', f"${offers['offer_b']['purchase_price']:,.0f}"],
         ['Cash at Closing:', f"${offers['offer_b']['cash_at_closing']:,.0f}"],
-        ['Payment Structure:', offers['offer_b']['payment_structure']],
+        ['Payment Structure:', Paragraph(offers['offer_b']['payment_structure'], styles['Normal'])],
         ['Closing Timeline:', f"{offers['offer_b']['timeline_days']} days"],
     ]
     
-    table_b = Table(offer_b_data, colWidths=[2*inch, 4*inch])
+    table_b = Table(offer_b_data, colWidths=[2*inch, 4.5*inch])
     table_b.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f0f0f0')),
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
