@@ -178,7 +178,14 @@ Offer A: {STRATEGIES[strategy1]['name']} (Weight: {weight1}% - {'MORE attractive
 Offer B: {STRATEGIES[strategy2]['name']} (Weight: {weight2}% - {'MORE attractive' if weight2 > 50 else 'LESS attractive' if weight2 < 50 else 'EQUALLY attractive'})
 
 INSTRUCTIONS:
-Generate TWO complete offer scenarios. The weighting determines relative attractiveness:
+Generate TWO complete offer scenarios using the EXACT strategies specified above (Offer A and Offer B).
+
+IMPORTANT: You MUST use the strategy specified for each offer:
+- Offer A MUST use the strategy: {STRATEGIES[strategy1]['name']}
+- Offer B MUST use the strategy: {STRATEGIES[strategy2]['name']}
+- DO NOT auto-generate variations of the same strategy unless BOTH offers use the same strategy
+
+The weighting determines relative attractiveness:
 - Higher weight (>50%) = More attractive terms for seller (higher price, more cash, faster close, better terms)
 - Lower weight (<50%) = Less attractive but still legitimate (lower price, less cash, longer timeline)
 - Equal weight (50/50) = Both equally attractive with different benefits
@@ -188,22 +195,20 @@ IMPORTANT CALCULATION RULES:
 FOR SUBJECT-TO OFFERS:
 - Base amount = Mortgage Balance + Arrears
 - Purchase price = Mortgage Balance + Arrears (you're taking over the debt)
-- Auto-generate TWO variations of cash at closing based on seller's request:
-  * Offer variation 1: ~80% of seller's cash request (e.g., $4,000 if they want $5,000) - all upfront
-  * Offer variation 2: ~120% of seller's cash request (e.g., $6,000 if they want $5,000)
+- Cash at closing calculation:
+  * If BOTH offers are Subject-To: Generate variations (~80% and ~120% of seller's cash request)
+  * If only ONE offer is Subject-To: Use seller's cash request as-is or adjust based on weight
 - IMPORTANT: Only use split payment (50% now + 50% in 60 days) if BOTH offers are Subject-To
-- If only ONE offer is Subject-To, do NOT use split payment - just vary the total amounts
+- If only ONE offer is Subject-To, do NOT use split payment - pay all cash upfront
 - Split payment creates a "decision point" for seller when comparing two Subject-To offers
-- The small cash difference is negligible for investor but creates psychological choice
 
 FOR LEASE OPTION OFFERS:
 - Monthly lease payment = Current PITI (mortgage payment)
 - Option price = Mortgage Balance + Additional Option Price (from user input)
 - Option term = User-specified months (from creative financing terms)
 - NO upfront option fee or option payment at closing ($0)
-- Generate two variations by varying the additional option price:
-  * Offer variation 1: Mortgage Balance + (80% of additional option price)
-  * Offer variation 2: Mortgage Balance + (120% of additional option price)
+- If BOTH offers are Lease Option: Vary the additional option price (80% and 120%)
+- If only ONE offer is Lease Option: Use the additional option price as-is
 - Structure: "Lease for $X/month with option to purchase for $Y within Z months"
 
 FOR SELLER FINANCING (WRAP) OFFERS:
@@ -212,9 +217,8 @@ FOR SELLER FINANCING (WRAP) OFFERS:
 - Purchase price = Mortgage Balance + Additional Purchase Price (from user input)
 - Interest rate = Same as seller's existing note (seller gets no benefit on rate)
 - Term = Same as seller's remaining mortgage term
-- Generate two variations:
-  * Offer variation 1: PITI + (80% of markup), Mortgage + (80% of additional price)
-  * Offer variation 2: PITI + (120% of markup), Mortgage + (120% of additional price)
+- If BOTH offers are Seller Financing: Vary the markup and additional price (80% and 120%)
+- If only ONE offer is Seller Financing: Use the values as-is
 - Structure: "Pay seller $X/month, seller continues paying their mortgage, you control property"
 
 FOR ALL-CASH OFFERS:
@@ -222,6 +226,7 @@ FOR ALL-CASH OFFERS:
 - Cash at closing = Purchase price - Mortgage Balance - Arrears
 - If cash at closing is negative, this offer is NOT viable (seller would owe money at closing)
 - Only present cash offers when the math works for the seller
+- Adjust purchase price based on weight (higher weight = higher percentage of ARV)
 
 For each offer, provide:
 1. Purchase price (calculated per rules above)
