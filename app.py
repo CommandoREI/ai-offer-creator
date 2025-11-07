@@ -136,6 +136,35 @@ def generate_offers():
         import traceback
         traceback.print_exc()  # Print full traceback
         return jsonify({'error': f'Failed to generate offers: {str(e)}'}), 500
+def validate_and_fix_cash_offer(offer, property_data):
+    """Validate and correct cash offer calculations"""
+    purchase_price = offer.get('purchase_price', 0)
+    mortgage = property_data['mortgage_balance']
+    arrears = property_data['arrears']
+    
+    # Calculate actual cash at closing (what seller receives after payoffs)
+    # This is: Purchase Price - Mortgage Payoff - Arrears - Estimated Closing Costs
+    estimated_closing_costs = purchase_price * 0.02  # Estimate 2% for closing costs
+    actual_cash_at_closing = purchase_price - mortgage - arrears - estimated_closing_costs
+    
+    # Update the offer with correct calculation
+    offer['cash_at_closing'] = round(actual_cash_at_closing, 0)
+    
+    # Flag non-viable offers
+    if actual_cash_at_closing < 0:
+        offer['viability_flag'] = 'NOT VIABLE'
+        offer['viability_note'] = f"Seller would need to bring ${abs(round(actual_cash_at_closing, 0)):,.0f} to closing to cover mortgage shortfall"
+        
+        # Update investor notes to emphasize non-viability
+        original_notes = offer.get('investor_notes', '')
+        offer['investor_notes'] = f"⚠️ NOT VIABLE: Purchase price (${purchase_price:,.0f}) is less than mortgage + arrears (${mortgage + arrears:,.0f}). Seller would owe ${abs(round(actual_cash_at_closing, 0)):,.0f} at closing. {original_notes}"
+        
+        # Update presentation script to reflect reality
+        offer['presentation_script'] = f"Mr. Seller, while I've calculated a cash offer at ${purchase_price:,.0f}, I need to be transparent with you: after paying off your mortgage (${mortgage:,.0f}) and arrears (${arrears:,.0f}), plus closing costs, you would need to bring approximately ${abs(round(actual_cash_at_closing, 0)):,.0f} to closing. This is why I believe the other offer I'm presenting would work much better for your situation."
+    else:
+        offer['viability_flag'] = 'VIABLE'
+        offer['viability_note'] = f"Seller receives ${round(actual_cash_at_closing, 0):,.0f} cash after all payoffs"
+
 
 def generate_strategic_offers(strategy1, strategy2, weight1, weight2,
                               property_data, seller_data, investor_data,
@@ -286,7 +315,13 @@ Return ONLY valid JSON in this exact format:
     
     # Parse response
     result = json.loads(response.choices[0].message.content)
-    
+        
+    # Validate and fix cash offer calculations
+    if result.get('offer_a', {}).get('strategy') == 'cash':
+        validate_and_fix_cash_offer(result['offer_a'], property_data)
+    if result.get('offer_b', {}).get('strategy') == 'cash':
+        validate_and_fix_cash_offer(result['offer_b'], property_data)
+
     # Add metadata
     result['generated_at'] = datetime.now().isoformat()
     result['property_arv'] = property_data['arv']
