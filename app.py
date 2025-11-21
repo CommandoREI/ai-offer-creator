@@ -224,16 +224,32 @@ IMPORTANT CALCULATION RULES:
 FOR SUBJECT-TO OFFERS:
 - Base amount = Mortgage Balance + Arrears
 - Purchase price = Mortgage Balance + Arrears (you're handling the mortgage payments)
-- Cash at closing calculation:
-  * If BOTH offers are Subject-To: Generate variations based on EXACT weight percentages
-    - Offer A weight > Offer B weight: Offer A gets MORE cash (100-120% of request, upfront) | Offer B gets LESS cash (70-90% of request, split payment)
-    - Offer B weight > Offer A weight: Offer B gets MORE cash (100-120% of request, upfront) | Offer A gets LESS cash (70-90% of request, split payment)
-    - EQUAL weights (50/50): BOTH offers get 100% of seller's cash request, BOTH paid upfront, NO split payment
+- Cash at closing calculation - STRATEGIC VARIATION:
+  * If BOTH offers are Subject-To: Create a genuine trade-off using CASH TIMING vs CASH AMOUNT
+    
+    HIGHER WEIGHT OFFER (More Attractive) - "All Cash Now":
+    - Cash amount: 90-100% of seller's cash request
+    - Payment timing: 100% paid at closing (ALL UPFRONT)
+    - Appeal: Immediate liquidity, instant relief, no waiting
+    - Example: Seller requests $5,000 → Offer $4,500-$5,000 all at closing
+    
+    LOWER WEIGHT OFFER (Less Attractive, But More Total) - "More Money, But Wait":
+    - Total cash: 100-120% of seller's cash request (MORE than upfront offer)
+    - Payment timing: SPLIT (50% at closing + 50% in 60 days)
+    - At closing amount: MUST be LESS than the upfront offer's closing amount
+    - Appeal: More total money, but requires patience
+    - Example: Seller requests $5,000 → Offer $2,500 at closing + $3,000 in 60 days = $5,500 total
+    
+    EQUAL WEIGHTS (50/50):
+    - BOTH offers get 100% of seller's cash request
+    - BOTH paid upfront at closing
+    - NO split payment
+  
   * If only ONE offer is Subject-To: Use seller's cash request as-is or adjust based on weight
-- CRITICAL: Split payment (50% now + 50% in 60 days) ONLY for the offer with LOWER weight
-- The offer with HIGHER weight ALWAYS pays all cash upfront
-- When weights are EQUAL (50/50), NEVER use split payment - both offers pay upfront
-- Split payment makes an offer LESS attractive because seller waits for full payment
+
+- KEY PSYCHOLOGY: Higher weight = immediate cash (more attractive). Lower weight = more total cash but delayed (creates genuine choice)
+- CRITICAL RULE: Split offer's closing payment MUST ALWAYS be LESS than upfront offer's closing payment
+- This creates the trade-off: "Take less now, or wait for more"
 
 FOR LEASE OPTION OFFERS:
 - Monthly lease payment = Current PITI (mortgage payment)
