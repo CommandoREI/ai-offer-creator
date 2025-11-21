@@ -225,11 +225,14 @@ FOR SUBJECT-TO OFFERS:
 - Base amount = Mortgage Balance + Arrears
 - Purchase price = Mortgage Balance + Arrears (you're handling the mortgage payments)
 - Cash at closing calculation:
-  * If BOTH offers are Subject-To: Generate variations (~80% and ~120% of seller's cash request)
+  * If BOTH offers are Subject-To: Generate variations based on weight
+    - HIGHER weight (more attractive) = MORE cash (~110-120% of seller's cash request, paid upfront)
+    - LOWER weight (less attractive) = LESS cash (~70-80% of seller's cash request, with split payment)
   * If only ONE offer is Subject-To: Use seller's cash request as-is or adjust based on weight
-- IMPORTANT: Only use split payment (50% now + 50% in 60 days) if BOTH offers are Subject-To
-- If only ONE offer is Subject-To, do NOT use split payment - pay all cash upfront
-- Split payment creates a "decision point" for seller when comparing two Subject-To offers
+- IMPORTANT: Only use split payment (50% now + 50% in 60 days) for the LESS ATTRACTIVE Subject-To offer
+- The MORE ATTRACTIVE offer should pay all cash upfront
+- Split payment makes an offer LESS attractive because seller waits for full payment
+
 
 FOR LEASE OPTION OFFERS:
 - Monthly lease payment = Current PITI (mortgage payment)
