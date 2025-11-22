@@ -299,6 +299,19 @@ CRITICAL - PRESENTATION SCRIPT ACCURACY:
 - Example: If seller requests $4,000 and you offer exactly $4,000 total, say "the full $4,000 you requested" NOT "more than your request"
 - Example: If seller requests $4,000 and you offer $4,500 total, you CAN say "$4,500, which is more than your $4,000 request"
 
+CRITICAL - BONUS/ADDITIONAL PAYMENT LANGUAGE:
+- NEVER use "bonus" or "additional" language when offering LESS than seller's request
+- "Bonus" ONLY applies when total cash EXCEEDS the seller's request
+- When offering LESS than requested, be honest and straightforward:
+  * Correct: "$5,400, which is 90% of your $6,000 request"
+  * WRONG: "90% of your $6,000 with an additional $400 bonus" (this makes no mathematical sense)
+- When offering MORE than requested, you CAN use bonus language:
+  * Correct: "$6,500, which is your $6,000 request plus a $500 bonus"
+  * Correct: "$6,500 total, exceeding your request by $500"
+- Math check: If your offer < seller's request, there is NO bonus, NO additional amount, NO extra
+- Example: Seller wants $6,000, you offer $5,400 → Say "90% of your request" NOT "90% plus $400 bonus"
+- Example: Seller wants $5,000, you offer $5,500 → You CAN say "$500 bonus" or "$500 more than requested"
+
 Return ONLY valid JSON in this exact format:
 {{
   "offer_a": {{
