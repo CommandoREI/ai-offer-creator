@@ -287,6 +287,18 @@ For each offer, provide:
 7. Presentation script (emphasize payment split as flexibility/benefit for Subject-To variation 2)
 8. Strategic notes for investor (negotiation tips, fallback positions)
 
+CRITICAL - PRESENTATION SCRIPT ACCURACY:
+- You MUST accurately describe cash amounts in presentation scripts
+- ONLY claim "more than your request" or "exceeds your request" if total cash ACTUALLY exceeds seller's cash request
+- If total cash EQUALS seller's request, DO NOT say "more than" - instead emphasize OTHER benefits:
+  * Timing flexibility ("structured to give you options")
+  * Tax advantages ("split payment may reduce immediate tax burden")
+  * Certainty ("guaranteed payment schedule")
+  * Speed ("faster closing" or "no waiting for full amount")
+- NEVER make false claims about amounts - verify your math before writing scripts
+- Example: If seller requests $4,000 and you offer exactly $4,000 total, say "the full $4,000 you requested" NOT "more than your request"
+- Example: If seller requests $4,000 and you offer $4,500 total, you CAN say "$4,500, which is more than your $4,000 request"
+
 Return ONLY valid JSON in this exact format:
 {{
   "offer_a": {{
