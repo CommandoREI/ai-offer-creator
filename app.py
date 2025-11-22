@@ -234,11 +234,14 @@ FOR SUBJECT-TO OFFERS:
     - Example: Seller requests $5,000 → Offer $4,500-$5,000 all at closing
     
     LOWER WEIGHT OFFER (Less Attractive, But More Total) - "More Money, But Wait":
-    - Total cash: 100-120% of seller's cash request (MORE than upfront offer)
-    - Payment timing: SPLIT (50% at closing + 50% in 60 days)
+    - Total cash: 105-120% of seller's cash request (MORE than upfront offer)
+    - CRITICAL RULE: Total cash MUST be MORE than the higher-weight offer's total cash
+    - Payment timing: SPLIT (40-50% at closing + 50-60% in 60 days)
     - At closing amount: MUST be LESS than the upfront offer's closing amount
-    - Appeal: More total money, but requires patience
-    - Example: Seller requests $5,000 → Offer $2,500 at closing + $3,000 in 60 days = $5,500 total
+    - Appeal: More total money, but requires patience and waiting
+    - Example: Seller requests $5,000 → Higher weight gives $4,500 all at closing, Lower weight gives $2,500 at closing + $3,000 in 60 days = $5,500 total
+    - Math verification: If higher weight total = $4,500, lower weight MUST be $4,725-$5,400 total (never the same amount!)
+    - DO NOT give the same total cash to both offers - the split payment offer must have MORE total to justify the wait
     
     EQUAL WEIGHTS (50/50):
     - BOTH offers get 100% of seller's cash request
@@ -271,11 +274,23 @@ FOR SELLER FINANCING (WRAP) OFFERS:
 - Structure: "Pay seller $X/month, seller continues paying their mortgage, you control property"
 
 FOR ALL-CASH OFFERS:
-- Purchase price = ARV × Max Cash Offer Percentage
+- Base calculation: Purchase price = ARV × Max Cash Offer Percentage
 - Cash at closing = Purchase price - Mortgage Balance - Arrears
 - If cash at closing is negative, this offer is NOT viable (seller would owe money at closing)
 - Only present cash offers when the math works for the seller
-- Adjust purchase price based on weight (higher weight = higher percentage of ARV)
+
+WEIGHT-BASED CASH OFFER ADJUSTMENT:
+- CRITICAL: Consider seller's cash request when determining final cash at closing
+- DO NOT offer wildly more than seller's request unless strategically justified
+- Higher weight (>50%): Target 100-110% of seller's cash request (if viable within ARV constraints)
+- Lower weight (<50%): Target 80-95% of seller's cash request (if viable within ARV constraints)
+- Equal weight (50%): Target 95-100% of seller's cash request
+- If ARV-based calculation gives much more than seller's request, adjust purchase price DOWN to reasonable amount
+- Example: Seller requests $5,000, ARV calc gives $10,000 → Adjust to give $5,000-$5,500 (higher weight) or $4,000-$4,750 (lower weight)
+- Example: Seller requests $5,000, higher weight cash → aim for $5,000-$5,500 at closing
+- Example: Seller requests $5,000, lower weight cash → aim for $4,000-$4,750 at closing
+- Validate: Final cash at closing should be reasonable relative to seller's actual needs, not just ARV-based maximum
+- This ensures cash offers are competitive but not absurdly generous
 
 For each offer, provide:
 1. Purchase price (calculated per rules above)
