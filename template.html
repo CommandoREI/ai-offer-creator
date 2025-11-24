@@ -483,7 +483,7 @@
                         <h3>Offer A</h3>
                         <div class="form-group">
                             <label>Strategy:</label>
-                            <select id="strategy1" onchange="updateStrategyInfo('strategy1', 'info1')">
+                            <select id="strategy1" onchange="updateStrategyInfo('strategy1', 'info1'); toggleMaxOfferField();">
                                 <option value="cash">All Cash</option>
                                 <option value="subject_to" selected>Subject-To (Take Over Payments)</option>
                                 <option value="lease_option">Lease Option</option>
@@ -513,7 +513,7 @@
                         <h3>Offer B</h3>
                         <div class="form-group">
                             <label>Strategy:</label>
-                            <select id="strategy2" onchange="updateStrategyInfo('strategy2', 'info2')">
+                            <select id="strategy2" onchange="updateStrategyInfo('strategy2', 'info2'); toggleMaxOfferField();">
                                 <option value="cash" selected>All Cash</option>
                                 <option value="subject_to">Subject-To (Take Over Payments)</option>
                                 <option value="lease_option">Lease Option</option>
@@ -548,10 +548,7 @@
                         <label>ARV (After Repair Value):</label>
                         <input type="number" id="arv" placeholder="150000" value="150000">
                     </div>
-                    <div class="form-group">
-                        <label>Estimated Repairs:</label>
-                        <input type="number" id="repairs" placeholder="30000" value="30000">
-                    </div>
+
                     <div class="form-group">
                         <label>Current Mortgage Balance:</label>
                         <input type="number" id="mortgage_balance" placeholder="95000" value="95000">
@@ -559,6 +556,10 @@
                     <div class="form-group">
                         <label>Monthly Mortgage Payment:</label>
                         <input type="number" id="monthly_payment" placeholder="850" value="850">
+                    </div>
+                    <div class="form-group">
+                        <label>Arrears/Back Payments:</label>
+                        <input type="number" id="arrears" placeholder="0" value="0">
                     </div>
                     <div class="form-group">
                         <label>Property Condition (1-10):</label>
@@ -597,8 +598,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Cash Needed at Closing:</label>
-                        <input type="number" id="cash_needed" placeholder="5000" value="5000">
+                        <label>Seller's Cash Request:</label>
+                        <input type="number" id="seller_cash_request" placeholder="5000" value="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Closing Costs:</label>
+                        <input type="number" id="closing_costs" placeholder="3000" value="3000">
+                        <small style="color: #888; display: block; margin-top: 5px;">Added to purchase price to cover transaction costs</small>
                     </div>
                 </div>
             </div>
@@ -607,9 +613,10 @@
             <div class="card">
                 <h2>4️⃣ Your Investment Criteria</h2>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label>Max Offer (% of ARV):</label>
+                    <div class="form-group" id="max_offer_field">
+                        <label>Max Cash Offer (% of ARV):</label>
                         <input type="number" id="max_offer_percent" min="50" max="100" placeholder="70" value="70">
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">Only applies to all-cash offers</small>
                     </div>
                     <div class="form-group">
                         <label>Minimum Profit Target:</label>
@@ -627,6 +634,41 @@
                             <option value="rental">Rental/Hold</option>
                             <option value="brrrr">BRRRR</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creative Financing Terms -->
+            <div class="card">
+                <h2>5️⃣ Creative Financing Terms</h2>
+                <p style="color: #9e9e9e; margin-bottom: 20px;">These fields appear based on your selected strategies</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Lease Option Fields -->
+                    <div class="form-group creative-field lease-option-field" style="display: none;">
+                        <label>Option Term (months):</label>
+                        <select id="option_term_months">
+                            <option value="24">24 months</option>
+                            <option value="36" selected>36 months</option>
+                            <option value="48">48 months</option>
+                            <option value="60">60 months</option>
+                        </select>
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">For Lease Option deals</small>
+                    </div>
+                    <div class="form-group creative-field lease-option-field" style="display: none;">
+                        <label>Additional Amount for Option Price:</label>
+                        <input type="number" id="additional_option_price" placeholder="10000" value="0">
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">Amount to add to mortgage balance</small>
+                    </div>
+                    <!-- Seller Financing (Wrap) Fields -->
+                    <div class="form-group creative-field seller-financing-field" style="display: none;">
+                        <label>Monthly Payment Markup:</label>
+                        <input type="number" id="monthly_payment_markup" placeholder="200" value="0">
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">Amount to add to PITI for seller</small>
+                    </div>
+                    <div class="form-group creative-field seller-financing-field" style="display: none;">
+                        <label>Additional Purchase Price:</label>
+                        <input type="number" id="additional_purchase_price" placeholder="10000" value="0">
+                        <small style="color: #9e9e9e; display: block; margin-top: 5px;">Amount to add to mortgage balance</small>
                     </div>
                 </div>
             </div>
@@ -695,6 +737,7 @@
                 strategies = data;
                 updateStrategyInfo('strategy1', 'info1');
                 updateStrategyInfo('strategy2', 'info2');
+                toggleMaxOfferField();
             });
 
         function setMode(mode) {
@@ -742,6 +785,41 @@
             }
         }
 
+        function toggleMaxOfferField() {
+            // Show max_offer_field only if either strategy is 'cash'
+            const strategy1 = document.getElementById('strategy1').value;
+            const strategy2 = document.getElementById('strategy2').value;
+            const maxOfferField = document.getElementById('max_offer_field');
+            
+            if (strategy1 === 'cash' || strategy2 === 'cash') {
+                maxOfferField.style.display = 'block';
+            } else {
+                maxOfferField.style.display = 'none';
+            }
+            
+            // Also toggle creative financing fields
+            toggleCreativeFields();
+        }
+        
+        function toggleCreativeFields() {
+            const strategy1 = document.getElementById('strategy1').value;
+            const strategy2 = document.getElementById('strategy2').value;
+            
+            // Show/hide Lease Option fields
+            const leaseOptionFields = document.querySelectorAll('.lease-option-field');
+            const showLeaseOption = (strategy1 === 'lease_option' || strategy2 === 'lease_option');
+            leaseOptionFields.forEach(field => {
+                field.style.display = showLeaseOption ? 'block' : 'none';
+            });
+            
+            // Show/hide Seller Financing (Wrap) fields
+            const sellerFinancingFields = document.querySelectorAll('.seller-financing-field');
+            const showSellerFinancing = (strategy1 === 'seller_financing' || strategy2 === 'seller_financing');
+            sellerFinancingFields.forEach(field => {
+                field.style.display = showSellerFinancing ? 'block' : 'none';
+            });
+        }
+
         function applyPreset(preset) {
             switch(preset) {
                 case 'sub2_vs_cash':
@@ -773,6 +851,7 @@
             updateWeight('weight1', 'weight1Display', 'weight2', 'weight2Display');
             updateStrategyInfo('strategy1', 'info1');
             updateStrategyInfo('strategy2', 'info2');
+            toggleMaxOfferField();
         }
 
         async function generateOffers() {
@@ -787,18 +866,23 @@
                 offer_a_weight: document.getElementById('weight1').value,
                 offer_b_weight: document.getElementById('weight2').value,
                 arv: document.getElementById('arv').value,
-                repairs: document.getElementById('repairs').value,
                 mortgage_balance: document.getElementById('mortgage_balance').value,
+                arrears: document.getElementById('arrears').value,
                 monthly_payment: document.getElementById('monthly_payment').value,
                 condition: document.getElementById('condition').value,
                 motivation: document.getElementById('motivation_score').value,
                 pain_point: document.getElementById('pain_point').value,
                 timeline: document.getElementById('timeline').value,
-                cash_needed: document.getElementById('cash_needed').value,
+                seller_cash_request: document.getElementById('seller_cash_request').value,
+                closing_costs: document.getElementById('closing_costs').value,
                 max_offer_pct: document.getElementById('max_offer_percent').value,
                 min_profit: document.getElementById('min_profit').value,
                 available_cash: document.getElementById('available_cash').value,
                 exit_strategy: document.getElementById('exit_strategy').value,
+                option_term_months: document.getElementById('option_term_months').value,
+                additional_option_price: document.getElementById('additional_option_price').value,
+                monthly_payment_markup: document.getElementById('monthly_payment_markup').value,
+                additional_purchase_price: document.getElementById('additional_purchase_price').value,
                 advanced_mode: currentMode === 'advanced',
                 advanced_settings: {}
             };
