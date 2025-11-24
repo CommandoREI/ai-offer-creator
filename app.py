@@ -84,11 +84,11 @@ def generate_offers():
         # Property data
         property_data = {
             'arv': float(data.get('arv', 0)),
-            'repairs': float(data.get('repairs', 0)),
             'mortgage_balance': float(data.get('mortgage_balance', 0)),
             'monthly_payment': float(data.get('monthly_payment', 0)),
             'condition': data.get('condition', 5),
-            'arrears': float(data.get('arrears', 0))  # New: back payments/arrears
+            'arrears': float(data.get('arrears', 0)),  # Back payments/arrears
+            'closing_costs': float(data.get('closing_costs', 3000))  # Estimated closing costs
         }
         
         # Seller data
@@ -96,8 +96,7 @@ def generate_offers():
             'motivation_score': int(data.get('motivation', 5)),
             'pain_point': data.get('pain_point', ''),
             'timeline': data.get('timeline', ''),
-            'cash_needed': float(data.get('cash_needed', 0)),
-            'seller_cash_request': float(data.get('seller_cash_request', 0)),  # New: what seller is asking for
+            'seller_cash_request': float(data.get('seller_cash_request', 0)),  # What seller is asking for
             'priorities': data.get('priorities', [])
         }
         
@@ -176,17 +175,16 @@ def generate_strategic_offers(strategy1, strategy2, weight1, weight2,
 
 PROPERTY DETAILS:
 - ARV (After Repair Value): ${property_data['arv']:,.0f}
-- Estimated Repairs: ${property_data['repairs']:,.0f}
 - Current Mortgage: ${property_data['mortgage_balance']:,.0f}
 - Arrears/Back Payments: ${property_data['arrears']:,.0f}
 - Monthly Payment: ${property_data['monthly_payment']:,.0f}
+- Estimated Closing Costs: ${property_data['closing_costs']:,.0f}
 - Property Condition: {property_data['condition']}/10
 
 SELLER SITUATION:
 - Motivation Score: {seller_data['motivation_score']}/10
 - Primary Pain Point: {seller_data['pain_point']}
 - Timeline: {seller_data['timeline']}
-- Cash Needed at Closing: ${seller_data['cash_needed']:,.0f}
 - Seller's Cash Request: ${seller_data['seller_cash_request']:,.0f}
 - Priorities: {', '.join(seller_data['priorities'])}
 
@@ -275,9 +273,11 @@ FOR SELLER FINANCING (WRAP) OFFERS:
 
 FOR ALL-CASH OFFERS:
 - Base calculation: Purchase price = ARV × Max Cash Offer Percentage
-- Cash at closing = Purchase price - Mortgage Balance - Arrears
+- Add closing costs to purchase price to ensure seller nets their target amount
+- Cash at closing = Purchase price - Mortgage Balance - Arrears - Closing Costs
 - If cash at closing is negative, this offer is NOT viable (seller would owe money at closing)
 - Only present cash offers when the math works for the seller
+- CRITICAL: Closing costs reduce what seller nets, so factor them into purchase price calculations
 
 WEIGHT-BASED CASH OFFER ADJUSTMENT:
 - CRITICAL: Consider seller's cash request when determining final cash at closing
@@ -286,9 +286,10 @@ WEIGHT-BASED CASH OFFER ADJUSTMENT:
 - Lower weight (<50%): Target 80-95% of seller's cash request (if viable within ARV constraints)
 - Equal weight (50%): Target 95-100% of seller's cash request
 - If ARV-based calculation gives much more than seller's request, adjust purchase price DOWN to reasonable amount
-- Example: Seller requests $5,000, ARV calc gives $10,000 → Adjust to give $5,000-$5,500 (higher weight) or $4,000-$4,750 (lower weight)
-- Example: Seller requests $5,000, higher weight cash → aim for $5,000-$5,500 at closing
-- Example: Seller requests $5,000, lower weight cash → aim for $4,000-$4,750 at closing
+- Example: Seller requests $5,000, closing costs $3,000, mortgage $260,000 → Purchase price should be $268,000-$268,500 (higher weight) to net seller $5,000-$5,500 after all deductions
+- Example: Seller requests $5,000, higher weight cash → aim for $5,000-$5,500 NET to seller (after closing costs)
+- Example: Seller requests $5,000, lower weight cash → aim for $4,000-$4,750 NET to seller (after closing costs)
+- Remember: Cash at closing shown to seller should be what they NET after all costs are paid
 - Validate: Final cash at closing should be reasonable relative to seller's actual needs, not just ARV-based maximum
 - This ensures cash offers are competitive but not absurdly generous
 
