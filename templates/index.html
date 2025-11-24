@@ -13,8 +13,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
+            background: #f5f5f5;
+            color: #333333;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,12 +25,12 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            background: linear-gradient(135deg, #245c3b 0%, #1a4429 100%);
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            border: 2px solid #4caf50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: none;
         }
 
         .header h1 {
@@ -46,11 +46,12 @@
         }
 
         .mode-toggle {
-            background: #2d2d2d;
+            background: #ffffff;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            border: 2px solid #4caf50;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -63,9 +64,9 @@
 
         .mode-btn {
             padding: 12px 24px;
-            border: 2px solid #4caf50;
-            background: #1a1a1a;
-            color: #4caf50;
+            border: 2px solid #245c3b;
+            background: #ffffff;
+            color: #245c3b;
             cursor: pointer;
             border-radius: 5px;
             font-size: 14px;
@@ -74,8 +75,8 @@
         }
 
         .mode-btn.active {
-            background: #4caf50;
-            color: #1a1a1a;
+            background: #245c3b;
+            color: #ffffff;
         }
 
         .mode-btn:hover {
@@ -84,19 +85,19 @@
         }
 
         .card {
-            background: #2d2d2d;
+            background: #ffffff;
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 20px;
-            border: 2px solid #4caf50;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .card h2 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 20px;
             font-size: 24px;
-            border-bottom: 2px solid #4caf50;
+            border-bottom: 2px solid #245c3b;
             padding-bottom: 10px;
         }
 
@@ -108,14 +109,14 @@
         }
 
         .offer-config {
-            background: #1a1a1a;
+            background: #f9f9f9;
             padding: 20px;
             border-radius: 8px;
-            border: 2px solid #4caf50;
+            border: 1px solid #e0e0e0;
         }
 
         .offer-config h3 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 15px;
             font-size: 18px;
         }
@@ -126,7 +127,7 @@
 
         .form-group label {
             display: block;
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 8px;
             font-weight: bold;
             font-size: 14px;
@@ -138,10 +139,10 @@
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            background: #2d2d2d;
-            border: 2px solid #4caf50;
+            background: #ffffff;
+            border: 1px solid #cccccc;
             border-radius: 5px;
-            color: #e0e0e0;
+            color: #333333;
             font-size: 14px;
         }
 
@@ -149,8 +150,8 @@
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #66bb6a;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            border-color: #245c3b;
+            box-shadow: 0 0 0 3px rgba(36, 92, 59, 0.1);
         }
 
         .weight-slider {
@@ -167,7 +168,7 @@
         .weight-value {
             font-size: 24px;
             font-weight: bold;
-            color: #4caf50;
+            color: #245c3b;
         }
 
         .weight-label {
@@ -179,7 +180,7 @@
             width: 100%;
             height: 8px;
             border-radius: 5px;
-            background: #1a1a1a;
+            background: #e0e0e0;
             outline: none;
             -webkit-appearance: none;
         }
@@ -190,7 +191,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #4caf50;
+            background: #245c3b;
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
@@ -199,7 +200,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #4caf50;
+            background: #245c3b;
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
@@ -213,9 +214,9 @@
 
         .preset-btn {
             padding: 10px 16px;
-            background: #1a1a1a;
-            border: 2px solid #4caf50;
-            color: #4caf50;
+            background: #ffffff;
+            border: 2px solid #245c3b;
+            color: #245c3b;
             border-radius: 5px;
             cursor: pointer;
             font-size: 13px;
@@ -223,26 +224,26 @@
         }
 
         .preset-btn:hover {
-            background: #4caf50;
-            color: #1a1a1a;
+            background: #245c3b;
+            color: #ffffff;
         }
 
         .strategy-info {
-            background: #1a1a1a;
+            background: #f0f7f4;
             padding: 15px;
             border-radius: 5px;
             margin-top: 10px;
-            border-left: 4px solid #4caf50;
+            border-left: 4px solid #245c3b;
         }
 
         .strategy-info h4 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 8px;
             font-size: 14px;
         }
 
         .strategy-info p {
-            color: #9e9e9e;
+            color: #666666;
             font-size: 13px;
             line-height: 1.5;
         }
@@ -253,13 +254,13 @@
         }
 
         .strategy-info li {
-            color: #9e9e9e;
+            color: #666666;
             font-size: 12px;
             margin-bottom: 4px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            background: linear-gradient(135deg, #245c3b 0%, #1a4429 100%);
             color: white;
             padding: 16px 32px;
             border: none;
@@ -298,14 +299,14 @@
         }
 
         .offer-card {
-            background: #1a1a1a;
+            background: #ffffff;
             padding: 25px;
             border-radius: 8px;
-            border: 2px solid #4caf50;
+            border: 2px solid #245c3b;
         }
 
         .offer-card h3 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 15px;
             font-size: 20px;
         }
@@ -313,7 +314,7 @@
         .offer-detail {
             margin-bottom: 15px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #3d3d3d;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .offer-detail:last-child {
@@ -327,7 +328,7 @@
         }
 
         .offer-detail-value {
-            color: #e0e0e0;
+            color: #333333;
             font-size: 16px;
             font-weight: bold;
         }
@@ -337,7 +338,7 @@
         }
 
         .benefits-list h4 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 10px;
             font-size: 14px;
         }
@@ -348,7 +349,7 @@
         }
 
         .benefits-list li {
-            color: #e0e0e0;
+            color: #333333;
             padding: 8px 0;
             padding-left: 25px;
             position: relative;
@@ -357,27 +358,27 @@
 
         .benefits-list li:before {
             content: "✓";
-            color: #4caf50;
+            color: #245c3b;
             font-weight: bold;
             position: absolute;
             left: 0;
         }
 
         .presentation-script {
-            background: #1a1a1a;
+            background: #f0f7f4;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
-            border-left: 4px solid #4caf50;
+            border-left: 4px solid #245c3b;
         }
 
         .presentation-script h3 {
-            color: #4caf50;
+            color: #245c3b;
             margin-bottom: 15px;
         }
 
         .presentation-script p {
-            color: #e0e0e0;
+            color: #333333;
             line-height: 1.8;
             margin-bottom: 15px;
         }
@@ -391,9 +392,9 @@
         .btn-export {
             flex: 1;
             padding: 14px 24px;
-            border: 2px solid #4caf50;
-            background: #2d2d2d;
-            color: #4caf50;
+            border: 2px solid #245c3b;
+            background: #ffffff;
+            color: #245c3b;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
@@ -402,20 +403,20 @@
         }
 
         .btn-export:hover {
-            background: #4caf50;
-            color: #1a1a1a;
+            background: #245c3b;
+            color: #ffffff;
         }
 
         .loading {
             text-align: center;
             padding: 40px;
-            color: #4caf50;
+            color: #245c3b;
             font-size: 18px;
         }
 
         .spinner {
-            border: 4px solid #2d2d2d;
-            border-top: 4px solid #4caf50;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #245c3b;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -453,8 +454,8 @@
 
         <div class="mode-toggle">
             <div>
-                <strong style="color: #4caf50;">Mode:</strong>
-                <span id="modeDescription" style="color: #9e9e9e; margin-left: 10px;">Quick strategy selection</span>
+                <strong style="color: #245c3b;">Mode:</strong>
+                <span id="modeDescription" style="color: #666666; margin-left: 10px;">Quick strategy selection</span>
             </div>
             <div class="mode-buttons">
                 <button class="mode-btn active" onclick="setMode('simple')">🟢 Simple Mode</button>
