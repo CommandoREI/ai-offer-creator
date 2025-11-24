@@ -548,10 +548,7 @@
                         <label>ARV (After Repair Value):</label>
                         <input type="number" id="arv" placeholder="150000" value="150000">
                     </div>
-                    <div class="form-group">
-                        <label>Estimated Repairs:</label>
-                        <input type="number" id="repairs" placeholder="30000" value="30000">
-                    </div>
+
                     <div class="form-group">
                         <label>Current Mortgage Balance:</label>
                         <input type="number" id="mortgage_balance" placeholder="95000" value="95000">
@@ -601,12 +598,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Cash Needed at Closing:</label>
-                        <input type="number" id="cash_needed" placeholder="5000" value="5000">
-                    </div>
-                    <div class="form-group">
                         <label>Seller's Cash Request:</label>
                         <input type="number" id="seller_cash_request" placeholder="5000" value="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Closing Costs:</label>
+                        <input type="number" id="closing_costs" placeholder="3000" value="3000">
+                        <small style="color: #888; display: block; margin-top: 5px;">Added to purchase price to cover transaction costs</small>
                     </div>
                 </div>
             </div>
@@ -868,7 +866,6 @@
                 offer_a_weight: document.getElementById('weight1').value,
                 offer_b_weight: document.getElementById('weight2').value,
                 arv: document.getElementById('arv').value,
-                repairs: document.getElementById('repairs').value,
                 mortgage_balance: document.getElementById('mortgage_balance').value,
                 arrears: document.getElementById('arrears').value,
                 monthly_payment: document.getElementById('monthly_payment').value,
@@ -876,8 +873,8 @@
                 motivation: document.getElementById('motivation_score').value,
                 pain_point: document.getElementById('pain_point').value,
                 timeline: document.getElementById('timeline').value,
-                cash_needed: document.getElementById('cash_needed').value,
                 seller_cash_request: document.getElementById('seller_cash_request').value,
+                closing_costs: document.getElementById('closing_costs').value,
                 max_offer_pct: document.getElementById('max_offer_percent').value,
                 min_profit: document.getElementById('min_profit').value,
                 available_cash: document.getElementById('available_cash').value,
